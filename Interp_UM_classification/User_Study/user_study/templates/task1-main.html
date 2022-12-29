@@ -1,0 +1,516 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>UM prognostication user study -- task 1 </title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+    <script type="text/javascript"
+      src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript">
+      var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+
+
+        body {
+            color: #292929;
+            font: 90% Roboto, Arial, sans-serif;
+            font-weight: 300;
+        }
+
+        p {
+            padding: 0 10px;
+            line-height: 1.8;
+        }
+
+        ul li {
+            padding-right: 10px;
+            line-height: 1.6;
+        }
+
+        h3 {
+            padding: 5px 20px;
+            margin: 0;
+        }
+
+        table {
+          border-collapse: collapse;
+          text-align: center;
+        }
+
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            table-layout: fixed ;
+            width: 90% ;
+            margin:0% 5%;
+            /*border-style: hidden;*/
+            /*Remove all the outside
+            borders of the existing table*/
+        }
+        table th {
+            padding: 0.5rem;
+            border: 2px solid black;
+            height: 20px;
+        }
+        table td {
+            padding: 0.5rem;
+            border: 0px solid orange;
+        }
+
+        .text-center {
+            /*border: 5px solid #FFFF00;*/
+            text-align: center;
+        }
+
+        div#header {
+            position: relative;
+        }
+
+        div#header h1 {
+            height: 80px;
+            line-height: 80px;
+            margin: 0;
+            padding-left: 10px;
+            background: #e0e0e0;
+            color: #292929;
+        }
+
+        div#header a {
+            position: absolute;
+            right: 0;
+            top: 23px;
+            padding: 10px;
+            color: #006;
+        }
+
+        div#header li {
+            list-style: none;
+        }
+
+        div#footer {
+            background: #42444e;
+            
+            color: #fff;
+            position: relative;
+        }
+
+        div#footer p {
+            padding: 20px 10px;
+            z-index: 6;
+        }
+
+        div#left {
+            float: left;
+            width: 30%;
+            height: 100%;
+            background: #ffffff;
+            position: relative;
+            text-align: center;
+
+        }
+        div#right {
+            float: left;
+            width: 60%;
+            height: 100%;
+            background: #ffffff;
+            position: relative;
+
+        }
+
+        div#content {
+            left:50%;
+            width:55%;
+            margin:0 25%;
+            height: 600px;
+            background: #ffffff;
+        }
+
+        .zoom_out{
+            /*position: absolute;*/
+            /*top: 5%;*/
+            /*left:10%;*/
+            width: 80%;
+            height: 35%;
+            margin-left: 0%;
+            display: inline-block; /* change the default display type to inline-block */
+            overflow: hidden; 
+            border-style: solid;
+            
+        }
+
+        div#zoom {
+            width: 100%;
+            height: 100%;
+            transform-origin: -50px -110px;
+            transform: scale(1) translate(0px, 0px);
+            cursor:grab;
+        }
+
+        div#zoom > img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            
+        }
+
+        .zoom_out_bottom{
+            /*position: absolute;*/
+            /*top: 47%;*/
+            /*left:10%;*/
+            width: 80%;
+            height: 35%;
+            margin-left: 0%;
+            display: inline-block; /* change the default display type to inline-block */
+            overflow: hidden; 
+            border-style: solid;
+            
+        }
+        div#final_diagnosis{
+            border-radius: 20px;
+            background-color: #ffe6d5;
+        }
+
+
+        div#zoom_bottom {
+            width: 100%;
+            height: 100%;
+        }
+
+        div#zoom_bottom > img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+
+        div#footer {
+            clear: left;
+            width: 100%;
+            height: 200px;
+        }
+
+        button {
+          width: 150px;
+          padding: 10px;
+          border: none;
+          -webkit-border-radius: 5px; 
+          -moz-border-radius: 5px; 
+          border-radius: 5px; 
+          background-color: #0066ff;
+          font-size: 16px;
+          color: #fff;
+          cursor: pointer;
+          }
+    </style>
+</head>
+<body  onload="update_values();">
+<div id="container">
+    <div id="header">
+        <h1>Task 1: specimen <span id="specimen_id"></span>/6</h1>
+    </div>
+    <div id="left">
+        <h3 > Cytopathology image</h3>
+        <div class="zoom_out">
+            <div id="zoom">
+                <img id="thumbnail" src="{{url_for('static', filename='thumbnail/Slide '+slide_id+'_task1.jpg')}}" alt="zoom" >
+            </div>
+        </div>
+        <p></p>
+        <h3> Full resolution image region</h3>
+        <div class="zoom_out_bottom">
+            <div id="zoom_bottom">
+                <img id="fullres" src="" alt="zoom_bottom">
+            </div>
+        </div>
+    </div>
+    <div id="right">
+            <h2>Task 1: UM prognostication with cytopathology images only </h2>
+            <div id="final_diagnosis">
+            <h3>Final diagnosis:</h3>
+            <p>
+               By screening the cytopathology image shown on the left, do you think the specimen is more <span style="font-weight: 700;">GEP class 1</span> like (with lower metastatic risk) or more <span style="font-weight: 700;">GEP class 2</span> like (with higher metastatic risk)?</p>
+            
+            
+            <p></p>
+            <table class="topics">
+              <tr>
+                <th>          </th>
+                <th>          </th>
+                <th>          </th>
+                <th>          </th>
+                <th>          </th>
+                <th>          </th>
+                <th>          </th>
+              </tr>
+              <tr>
+                <td><INPUT TYPE="Radio" Name="GEP" Value="1"></td>
+                <td><INPUT TYPE="Radio" Name="GEP" Value="2"></td>
+                <td><INPUT TYPE="Radio" Name="GEP" Value="3"></td>
+                <td><INPUT TYPE="Radio" Name="GEP" Value="4"></td>
+                <td><INPUT TYPE="Radio" Name="GEP" Value="5"></td>
+                <td><INPUT TYPE="Radio" Name="GEP" Value="6"></td>
+                <td><INPUT TYPE="Radio" Name="GEP" Value="7"></td>
+              </tr>
+              <tr>
+                <td>GEP class 1 like</td>
+                <td></td>
+                <td></td>
+                <td>Cannot tell</td>
+                <td></td>
+                <td></td>
+                <td>GEP class 2 like</td>
+              </tr>
+              <tr>
+                <td>Lower metastatic risk</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Higher metastatic risk</td>
+              </tr>
+            </table>
+            <p></p>
+        </div>
+            <div class="text-center">
+                <p>Click the "Next" button to go to the next specimen. </p>
+                <p>(You cannot go back to this specimen again.)</p>
+                <a onclick="f_per_case_survey({{slide_id}});"><button>Next</button></a>
+            </div>
+            
+        
+
+
+
+
+    </div>
+</div>
+
+    <script>
+        document.getElementById("fullres").innerHTML;
+        console.log("window.innerHeight",window.innerHeight);
+        document.getElementById("left").style.height = window.innerHeight+"px";
+        var intervalID = setInterval(update_values,500);
+        var scale = 1,
+            panning = false,
+            pointX = 0,
+            pointY = 0,
+            start = { x: 0, y: 0 },
+            _thumbnail_w = 600.,
+            _thumbnail_h = 370.,
+            _thumbnail_ori_w = 0.,
+            _thumbnail_ori_h = 0.,
+            zoom = document.getElementById("zoom"),
+            _thumbnail = document.getElementById("thumbnail"),
+            _area_w = _thumbnail.width,
+            _area_h = _thumbnail.height,
+            _ori_scale = 1,
+            _ori_w = 0,
+            _ori_h = 0,
+            slide_id = "{{slide_id}}";
+
+
+
+        if ({{slide_id}} == "13"){
+            _thumbnail_w = 600.;
+            _thumbnail_h = 400.;
+            _thumbnail_ori_w = 0.;
+            _thumbnail_ori_h = 0.;
+            document.getElementById("specimen_id").innerHTML = "3";
+        }else if ({{slide_id}} == "24"){
+            _thumbnail_w = 700.;
+            _thumbnail_h = 450.;
+            _thumbnail_ori_w = 0.;
+            _thumbnail_ori_h = 0.;
+            document.getElementById("specimen_id").innerHTML = "1";
+        }else if ({{slide_id}} == "29"){
+            _thumbnail_w = 600.;
+            _thumbnail_h = 450.;
+            _thumbnail_ori_w = 0.;
+            _thumbnail_ori_h = 0.;
+            document.getElementById("specimen_id").innerHTML = "5";
+        }else if ({{slide_id}} == "51"){
+            _thumbnail_w = 500.;
+            _thumbnail_h = 300.;
+            _thumbnail_ori_w = 0.;
+            _thumbnail_ori_h = 0.;
+            document.getElementById("specimen_id").innerHTML = "4";
+        }else if ({{slide_id}} == "59"){
+            _thumbnail_w = 600.;
+            _thumbnail_h = 370.;
+            _thumbnail_ori_w = 0.;
+            _thumbnail_ori_h = 0.;
+            document.getElementById("specimen_id").innerHTML = "2";
+        }else if ({{slide_id}} == "65"){
+            _thumbnail_w = 450.;
+            _thumbnail_h = 250.;
+            _thumbnail_ori_w = 450.;
+            _thumbnail_ori_h = 0.;
+            document.getElementById("specimen_id").innerHTML = "6";
+        }
+        if (_thumbnail_w/_thumbnail_h > _area_w/_area_h) {
+            _ori_h = _area_h/2 - _area_w*_thumbnail_h/_thumbnail_w/2;
+            _ori_scale = _area_w/_thumbnail_w;
+        }else{
+            _ori_w = _area_w/2 - _area_h*_thumbnail_w/_thumbnail_h/2;
+            _ori_scale = _area_h/_thumbnail_h;
+        }
+        console.log(_thumbnail_w,_thumbnail_h);
+
+        function setTransform() {
+            zoom.style.transformOrigin = zoom.getBoundingClientRect().left + "px, " + zoom.getBoundingClientRect().top + "px";
+        }
+        setTransform()
+
+        function setTransform(e) {
+            zoom.style.transform = "translate(" + pointX + "px, " + pointY + "px) scale(" + scale + ")";
+        }
+        function update_values(){
+            $.getJSON($SCRIPT_ROOT  + '/task1-fullres_loading',
+                function(data){
+                    document.getElementById("fullres").src = data.zoom_fullres_name;
+                    // $('#fullres').src=data.zoom_fullres_name;
+                    console.log(data.zoom_fullres_name);
+                });
+        };
+
+        function f_per_case_survey(slide_id){
+            window.location.href = "/task1-per_case_survey_" + slide_id;
+        }
+
+      function next_case(slide_id){  
+        var next_id  = "";
+        
+        if (slide_id == "65") {window.location.href = "/task2-introduction";}
+        else{
+            if (slide_id == "24") {next_id = "59";}
+            else if (slide_id == "59") {next_id = "13";}
+            else if (slide_id == "13") {next_id = "51";}
+            else if (slide_id == "51") {next_id = "29";}
+            else if (slide_id == "29") {next_id = "65";}
+            window.location.href = "/task1-slide-" + next_id;
+        }
+      }
+      zoom.onmousedown = function (e) {
+        e.preventDefault();
+        start = { x: e.clientX - pointX, y: e.clientY - pointY };
+        panning = true;
+        zoom.style.cursor="grabbing";
+      }
+
+      zoom.onmouseup = function (e) {
+        panning = false;
+        zoom.style.cursor="grab";
+      }
+
+      zoom.onmousemove = function (e) {
+        e.preventDefault();
+        // console.log(e.clientX,e.clientY,pointX,pointY,scale,_thumbnail.width,_thumbnail.height,_ori_h,_ori_w,_ori_scale);
+        // var tile_h = e.clientY / 3,
+        //     tile_w = e.clientX / 3,
+        //     loc_h = e.clientY - tile_h * 3,
+        //     loc_w = e.clientX - tile_w * 3;
+        // var xhr = new XMLHttpRequest();
+        // var url = "url";
+        // xhr.open("POST", "http://127.0.0.1:5000/task1-slide-"+{{slide_id}});
+        // console.log("http://127.0.0.1:5000/task1-slide-"+{{slide_id}});
+        // xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+
+        // var data = JSON.stringify({"object":"zoom",
+        //                            "globalX":zoom.getBoundingClientRect().left,
+        //                            "globalY":zoom.getBoundingClientRect().top,
+        //                            "slide_id":slide_id,
+        //                            "clientY": e.clientY,
+        //                            "clientX": e.clientX,
+        //                            "startX":start.x,
+        //                            "startY":start.y,
+        //                            "pointX":pointX,
+        //                            "pointY":pointY,
+        //                            "scale":scale,
+        //                            "window_width":_thumbnail.width,
+        //                            "window_height":_thumbnail.height,
+        //                            "oriY":_ori_h,
+        //                            "oriX":_ori_w,
+        //                            "oriScale":_ori_scale,
+        //                            "_thumbnail_width":_thumbnail_w,
+        //                            "_thumbnail_height":_thumbnail_h
+        //                         });
+        // xhr.send(data);
+
+        // document.getElementById("fullres").src = '{{zoom_fullres_name}}';
+
+        if (!panning) {
+          return;
+        }
+        pointX = (e.clientX - start.x);
+        pointY = (e.clientY - start.y);
+        setTransform(e);
+      }
+
+      zoom.onwheel = function (e) {
+        e.preventDefault();
+        var xs = (e.clientX - pointX) / scale,
+          ys = (e.clientY - pointY) / scale,
+          delta = (e.wheelDelta ? e.wheelDelta : -e.deltaY);
+        (delta > 0) ? (scale *= 1.2) : (scale /= 1.2);
+        pointX = e.clientX - xs * scale;
+        pointY = e.clientY - ys * scale;
+
+        setTransform(e);
+      }
+
+      zoom.onclick = function (e){
+        e.preventDefault();
+        var tile_h = e.clientY / 3,
+            tile_w = e.clientX / 3,
+            loc_h = e.clientY - tile_h * 3,
+            loc_w = e.clientX - tile_w * 3;
+        var xhr = new XMLHttpRequest();
+        var url = "url";
+
+        // xhr.open("POST", "http://127.0.0.1:5000/task1-slide-"+{{slide_id}});
+        // xhr.open("POST", "https://hchen135-gps50qyy0dlzl8r5.socketxp.com/task1-slide-"+{{slide_id}});
+        xhr.open("POST", window.location.href);
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+
+        console.log(e.clientX,e.clientY,pointX,pointY,scale,_thumbnail.width,_thumbnail.height,_ori_h,_ori_w,_ori_scale);
+        var data = JSON.stringify({"object":"zoom",
+                                   "globalX":zoom.getBoundingClientRect().left,
+                                   "globalY":zoom.getBoundingClientRect().top,
+                                   "slide_id":slide_id,
+                                   "clientY": e.clientY,
+                                   "clientX": e.clientX,
+                                   "startX":start.x,
+                                   "startY":start.y,
+                                   "pointX":pointX,
+                                   "pointY":pointY,
+                                   "scale":scale,
+                                   "window_width":_thumbnail.width,
+                                   "window_height":_thumbnail.height,
+                                   "oriY":_ori_h,
+                                   "oriX":_ori_w,
+                                   "oriScale":_ori_scale,
+                                   "_thumbnail_width":_thumbnail_w,
+                                   "_thumbnail_height":_thumbnail_h,
+                                   "_thumbnail_ori_width":_thumbnail_ori_w,
+                                   "_thumbnail_ori_height":_thumbnail_ori_h  
+
+                                });
+        xhr.send(data);
+
+      }
+
+      
+        
+    </script>
+
+
+</div>
+</body>
+</html>

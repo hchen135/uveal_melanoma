@@ -1,0 +1,407 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>VUM prognostication user study -- task 1 GUI desription</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+    <script type="text/javascript"
+      src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript">
+      var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+
+
+        body {
+            color: #292929;
+            font: 90% Roboto, Arial, sans-serif;
+            font-weight: 300;
+        }
+
+        p {
+            padding: 0 10px;
+            line-height: 1.8;
+        }
+
+        ul li {
+            padding-right: 10px;
+            line-height: 1.6;
+        }
+
+        h3 {
+            padding: 5px 20px;
+            margin: 0;
+        }
+
+        .text-center {
+            /*border: 5px solid #FFFF00;*/
+            text-align: center;
+        }
+
+        div#header {
+            position: relative;
+        }
+
+        div#header h1 {
+            height: 80px;
+            line-height: 80px;
+            margin: 0;
+            padding-left: 10px;
+            background: #e0e0e0;
+            color: #292929;
+        }
+
+        div#header a {
+            position: absolute;
+            right: 0;
+            top: 23px;
+            padding: 10px;
+            color: #006;
+        }
+
+        div#header li {
+            list-style: none;
+        }
+
+        div#footer {
+            background: #42444e;
+            
+            color: #fff;
+            position: relative;
+        }
+
+        div#footer p {
+            padding: 20px 10px;
+            z-index: 6;
+        }
+
+        div#wrapper {
+            float: left;
+            width: 100%;
+            height: 600px;
+            background: #ffffff;
+            position: relative;
+
+        }
+        div#right {
+            float: left;
+            width: 50%;
+            height: 100%;
+            left:50%;
+            background: #ffffff;
+            position: relative;
+
+        }
+
+        div#content {
+            left:50%;
+            width:55%;
+            margin:0 25%;
+            height: 600px;
+            background: #ffffff;
+        }
+
+        .zoom_out{
+            position: absolute;
+            top: 5%;
+            left:3%;
+            width: 20%;
+            height: 40%;
+            margin-left: 0%;
+            display: inline-block; /* change the default display type to inline-block */
+            overflow: hidden; 
+            border-style: solid;
+            
+        }
+
+        div#zoom {
+            width: 100%;
+            height: 100%;
+            transform-origin: -50px -110px;
+            transform: scale(1) translate(0px, 0px);
+            
+        }
+
+        div#zoom > img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            
+        }
+
+        .zoom_out_bottom{
+            position: absolute;
+            top: 55%;
+            left:3%;
+            width: 20%;
+            height: 40%;
+            margin-left: 0%;
+            display: inline-block; /* change the default display type to inline-block */
+            overflow: hidden; 
+            border-style: solid;
+            
+        }
+
+        div#zoom_bottom {
+            width: 100%;
+            height: 100%;
+        }
+
+        div#zoom_bottom > img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+
+        div#footer {
+            clear: left;
+            width: 100%;
+            height: 200px;
+        }
+        button {
+          width: 150px;
+          padding: 10px;
+          border: none;
+          -webkit-border-radius: 5px; 
+          -moz-border-radius: 5px; 
+          border-radius: 5px; 
+          background-color: #0066ff;
+          font-size: 16px;
+          color: #fff;
+          cursor: pointer;
+          }
+    </style>
+</head>
+<body onload="update_values();">
+<div id="container">
+    <div id="header">
+        <h1>Task 1 GUI description</h1>
+    </div>
+    <div id="wrapper">
+        <div class="zoom_out">
+            <div id="zoom">
+                <img id="thumbnail" src="/static/thumbnail/Slide 59_task1.jpg" alt="zoom" >
+            </div>
+        </div>
+    
+        <div id="content">
+            <h2>Task 1: UM prognostication with cytopathology images only </h2>
+            <p>
+               Cytopathology images are shown in the top left corner. You are asked to analyze the images to diagnose UM prognostication of this specimen.</p>
+            <p>You can interact with the cytopathology images:</p>
+            <ul>
+                <li><span style="font-weight: 700;">Press</span> and <span style="font-weight: 700;">move</span> the mouse to move the image</li>
+                <li>Zoom in and zoom out the image with <span style="font-weight: 700;">mouse wheel</span>. </li> 
+                <li><span style="font-weight: 700;">Click</span> the mouse in a particular area and the corresponding full-resolution region will be shown below.</li>
+            </ul>
+            <p>If you have been familiar with this tool, you can click the "Start" button below to start Task 2.</p>
+            <div class="text-center">
+                <a href="/task1-slide-24"><button>Start</button></a>
+            </div>
+
+            </p>
+        </div>
+
+        <div class="zoom_out_bottom">
+            <div id="zoom_bottom">
+                <img id="fullres" src="" alt="zoom_bottom">
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+        document.getElementById("fullres").innerHTML;
+        var intervalID = setInterval(update_values,500);
+        var scale = 1,
+            panning = false,
+            pointX = 0,
+            pointY = 0,
+            start = { x: 0, y: 0 },
+            _thumbnail_w = 600.,
+            _thumbnail_h = 370.,
+            _thumbnail_ori_w = 0.,
+            _thumbnail_ori_h = 0.,
+            zoom = document.getElementById("zoom"),
+            _thumbnail = document.getElementById("thumbnail"),
+            _area_w = _thumbnail.width,
+            _area_h = _thumbnail.height,
+            _ori_scale = 1,
+            _ori_w = 0,
+            _ori_h = 0,
+            slide_ind = 36,
+            ori_zoom_left = zoom.getBoundingClientRect().left,
+            ori_zoom_top = zoom.getBoundingClientRect().top;
+
+
+        if (_thumbnail_w/_thumbnail_h > _area_w/_area_h) {
+            _ori_h = _area_h/2 - _area_w*_thumbnail_h/_thumbnail_w/2;
+            _ori_scale = _area_w/_thumbnail_w;
+        }else{
+            _ori_w = _area_w/2 - _area_h*_thumbnail_w/_thumbnail_h/2;
+            _ori_scale = _area_h/_thumbnail_h;
+        }
+
+        console.log(zoom.style.transformOrigin);
+        function setTransformori() {
+            zoom.style.transformOrigin = "-"+ori_zoom_left + "px, -" + ori_zoom_top + "px";
+        }
+        setTransformori()
+        console.log(zoom.style.transformOrigin);
+        console.log(zoom.style.transform);
+        function setTransform(e) {
+            zoom.style.transform = "translate(" + pointX + "px, " + pointY + "px) scale(" + scale + ")";
+        }
+        function update_values(){
+            $.getJSON($SCRIPT_ROOT  + '/task1-fullres_loading',
+                function(data){
+                    document.getElementById("fullres").src = data.zoom_fullres_name;
+                    // $('#fullres').src=data.zoom_fullres_name;
+                    console.log(data.zoom_fullres_name);
+                });
+        };
+      zoom.onmousedown = function (e) {
+        e.preventDefault();
+        start = { x: e.clientX - pointX, y: e.clientY - pointY };
+        panning = true;
+      }
+
+      zoom.onmouseup = function (e) {
+        panning = false;
+      }
+
+      zoom.onmousemove = function (e) {
+        e.preventDefault();
+        // console.log(e.clientX,e.clientY,pointX,pointY,scale,_thumbnail.width,_thumbnail.height,_ori_h,_ori_w,_ori_scale);
+        // var tile_h = e.clientY / 3,
+        //     tile_w = e.clientX / 3,
+        //     loc_h = e.clientY - tile_h * 3,
+        //     loc_w = e.clientX - tile_w * 3;
+        // var xhr = new XMLHttpRequest();
+        // var url = "url";
+        // xhr.open("POST", "http://127.0.0.1:5000/task1-GUI_description");
+        // xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+        // // xhr.onreadystatechange = function () {
+        // //     if (xhr.readyState === 4 && xhr.status === 200) {
+        // //         var json = JSON.parse(xhr.responseText);
+        // //         console.log(json.email + ", " + json.password);
+        // //     }
+        // // };
+        // var data = JSON.stringify({"object":"zoom",
+        //                            "globalX":zoom.getBoundingClientRect().left,
+        //                            "globalY":zoom.getBoundingClientRect().top,
+        //                            "slide_ind":slide_ind,
+        //                            "clientY": e.clientY,
+        //                            "clientX": e.clientX,
+        //                            "startX":start.x,
+        //                            "startY":start.y,
+        //                            "pointX":pointX,
+        //                            "pointY":pointY,
+        //                            "scale":scale,
+        //                            "window_width":_thumbnail.width,
+        //                            "window_height":_thumbnail.height,
+        //                            "oriY":_ori_h,
+        //                            "oriX":_ori_w,
+        //                            "oriScale":_ori_scale,
+        //                            "_thumbnail_width":_thumbnail_w,
+        //                            "_thumbnail_height":_thumbnail_h  
+        //                         });
+        // xhr.send(data);
+        // // console.log('{{zoom_fullres_name}}');
+        
+
+
+        // document.getElementById("fullres").src = '{{zoom_fullres_name}}';
+        // $.ajax({
+        //     type: "POST",
+        //     url: "/webservices/PodcastService.asmx/CreateMarkers",
+        //     // The key needs to match your method's input parameter (case-sensitive).
+        //     data: JSON.stringify({"email": "hey@mail.com", "password": "101010"}),
+        //     contentType: "application/json; charset=utf-8",
+        //     dataType: "json",
+        //     success: function(data){alert(data);},
+        //     error: function(errMsg) {
+        //         alert(errMsg);
+        //     }
+        // });
+
+        // {% for tile_path in tile_list %}
+        //     // console.log('{{tile_path}}');       
+        //     {% if 'TileLoc_'+tile_h|string+'_'+tile_w|string+'_'+loc_h|string+'_'+loc_w|string+'.png' %}
+        //         document.getElementById("fullres").src = "/static/tUM_tiles/Slide 36/TileLoc_"+tile_h+"_"+tile_w+"_"+loc_h+"_"+loc_w+".png";
+        //     {% endif %}
+        // {% endfor %}
+          
+        // document.getElementById("fullres").src = "/static/tUM_tiles/Slide 36/TileLoc_"+String.valueOf(tile_h)+"_"+String.valueOf(tile_w)+"_"+String.valueOf(loc_h)+"_"+String.valueOf(loc_w)+".png";
+        if (!panning) {
+          return;
+        }
+        pointX = (e.clientX - start.x);
+        pointY = (e.clientY - start.y);
+        setTransform(e);
+      }
+
+      zoom.onwheel = function (e) {
+        e.preventDefault();
+        var xs = (e.clientX - pointX) / scale,
+          ys = (e.clientY - pointY) / scale,
+          delta = (e.wheelDelta ? e.wheelDelta : -e.deltaY);
+        (delta > 0) ? (scale *= 1.2) : (scale /= 1.2);
+        pointX = e.clientX - xs * scale;
+        pointY = e.clientY - ys * scale;
+
+        setTransform(e);
+      }
+
+      zoom.onclick = function (e){
+        e.preventDefault();
+        var tile_h = e.clientY / 3,
+            tile_w = e.clientX / 3,
+            loc_h = e.clientY - tile_h * 3,
+            loc_w = e.clientX - tile_w * 3;
+        var xhr = new XMLHttpRequest();
+        var url = "url";
+        // 
+        // xhr.open("POST", "http://127.0.0.1:5000/task1-GUI_description");
+        // xhr.open("POST", "https://hchen135-gps50qyy0dlzl8r5.socketxp.com/task1-GUI_description");
+        xhr.open("POST", window.location.href);
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+
+        console.log(e.clientX,e.clientY,pointX,pointY,scale,_thumbnail.width,_thumbnail.height,_ori_h,_ori_w,_ori_scale);
+        var data = JSON.stringify({"object":"zoom",
+                                   "globalX":zoom.getBoundingClientRect().left,
+                                   "globalY":zoom.getBoundingClientRect().top,
+                                   "slide_ind":slide_ind,
+                                   "clientY": e.clientY,
+                                   "clientX": e.clientX,
+                                   "startX":start.x,
+                                   "startY":start.y,
+                                   "pointX":pointX,
+                                   "pointY":pointY,
+                                   "scale":scale,
+                                   "window_width":_thumbnail.width,
+                                   "window_height":_thumbnail.height,
+                                   "oriY":_ori_h,
+                                   "oriX":_ori_w,
+                                   "oriScale":_ori_scale,
+                                   "_thumbnail_width":_thumbnail_w,
+                                   "_thumbnail_height":_thumbnail_h,
+                                   "_thumbnail_ori_width":_thumbnail_ori_w,
+                                   "_thumbnail_ori_height":_thumbnail_ori_h  
+                                });
+        xhr.send(data);
+
+      }
+    </script>
+
+
+</div>
+</body>
+</html>
