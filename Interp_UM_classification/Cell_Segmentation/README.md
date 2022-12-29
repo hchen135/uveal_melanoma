@@ -30,7 +30,7 @@ python eval.py --trained_model=weights/11242020/UMSLIC_79_4000.pth --score_thres
 ```
 
 After created the umap projection, we can use the same projection to create cell composition of new slides.
-# Evaluation: umap projection for specific slide
+### Evaluation: umap projection for specific slide
 ```Shell
 python eval.py --trained_model=weights/11182020/UMSLIC_79_4000.pth --score_threshold=0.15 --top_k=50 --config=UMSLIC_umap_proj_config --output_path=results/11182020/ --mapping_proj --proj_slide=51
 ```
