@@ -1,0 +1,50 @@
+Traceback (most recent call last):
+  File "eval.py", line 33, in <module>
+    from sklearn import manifold
+  File "/home/hchen135/anaconda3/lib/python3.7/site-packages/sklearn/__init__.py", line 82, in <module>
+    from .base import clone
+  File "/home/hchen135/anaconda3/lib/python3.7/site-packages/sklearn/base.py", line 20, in <module>
+    from .utils import _IS_32BIT
+  File "/home/hchen135/anaconda3/lib/python3.7/site-packages/sklearn/utils/__init__.py", line 27, in <module>
+    from .fixes import np_version
+  File "/home/hchen135/anaconda3/lib/python3.7/site-packages/sklearn/utils/fixes.py", line 18, in <module>
+    import scipy.stats
+  File "/home/hchen135/anaconda3/lib/python3.7/site-packages/scipy/stats/__init__.py", line 384, in <module>
+    from .stats import *
+  File "/home/hchen135/anaconda3/lib/python3.7/site-packages/scipy/stats/stats.py", line 179, in <module>
+    from scipy.spatial.distance import cdist
+  File "/home/hchen135/anaconda3/lib/python3.7/site-packages/scipy/spatial/__init__.py", line 101, in <module>
+    from ._plotutils import *
+  File "/home/hchen135/anaconda3/lib/python3.7/site-packages/scipy/spatial/_plotutils.py", line 4, in <module>
+    from scipy._lib.decorator import decorator as _decorator
+  File "/home/hchen135/anaconda3/lib/python3.7/site-packages/scipy/_lib/decorator.py", line 279, in <module>
+    class ContextManager(_GeneratorContextManager):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "eval.py", line 4, in <module>
+    from yolact import Yolact
+  File "/home/hchen135/uveal_melanoma/main_cell_segmentation/main_YOLACT_instance_segmentation/yolact/yolact.py", line 264, in <module>
+    class FPN(ScriptModuleWrapper):
+  File "/home/hchen135/uveal_melanoma/main_cell_segmentation/main_YOLACT_instance_segmentation/yolact/yolact.py", line 310, in FPN
+    def forward(self, convouts:List[torch.Tensor]):
+  File "/home/hchen135/anaconda3/lib/python3.7/site-packages/torch/jit/__init__.py", line 850, in script_method
+    ast = get_jit_def(fn, self_name="ScriptModule")
+  File "/home/hchen135/anaconda3/lib/python3.7/site-packages/torch/jit/frontend.py", line 152, in get_jit_def
+    source = dedent(inspect.getsource(fn))
+  File "/home/hchen135/anaconda3/lib/python3.7/inspect.py", line 973, in getsource
+    lines, lnum = getsourcelines(object)
+  File "/home/hchen135/anaconda3/lib/python3.7/inspect.py", line 965, in getsourcelines
+    return getblock(lines[lnum:]), lnum + 1
+  File "/home/hchen135/anaconda3/lib/python3.7/inspect.py", line 940, in getblock
+    for _token in tokens:
+  File "/home/hchen135/anaconda3/lib/python3.7/tokenize.py", line 583, in _tokenize
+    pseudomatch = _compile(PseudoToken).match(line, pos)
+  File "/home/hchen135/anaconda3/lib/python3.7/tokenize.py", line 148, in _compile
+    return re.compile(expr, re.UNICODE)
+  File "/home/hchen135/anaconda3/lib/python3.7/re.py", line 234, in compile
+    return _compile(pattern, flags)
+  File "/home/hchen135/anaconda3/lib/python3.7/re.py", line 274, in _compile
+    flags = flags.value
+  File "/home/hchen135/anaconda3/lib/python3.7/types.py", line 164, in __get__
+    def __get__(self, instance, ownerclass=None):
+KeyboardInterrupt
