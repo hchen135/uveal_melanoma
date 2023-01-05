@@ -11,6 +11,13 @@ To run this code in a completely different dataset, first, please prepare the da
 2. Prepare the dataset metafile. Examples are in ``UMSLIC_dataset``.
 3. Prepare the config of the modified model. Examples are in ``UMSLIC_config``.
 
+### Data generation
+To create the input for ``Cell_Segmentation`` pipeline, please first use ``Cell_Annotation`` to create the anntations, then follow ``network_input_sample/Slide 36/2459_TileLoc_153_58_0_1.npy`` to create the inputs.
+
+Once got the ``npy`` files, use ``network_input_sample/split.py`` to create ``train/val`` set. Then use ``network_input_sample/coco_style_anno_generation.py`` to generate the networ input.
+
+When using ``umap_gene`` or ``umap_proj`` in ``eval.py``, please refer to ``network_input_sample/coco_style_info_gene.py`` to create the network input.
+
 ### Training
 Run ``train.py`` with the defined config file.
 ```Shell
