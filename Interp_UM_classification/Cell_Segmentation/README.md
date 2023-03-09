@@ -16,6 +16,8 @@ To create the input for ``Cell_Segmentation`` pipeline, please first use ``Cell_
 
 Once got the ``npy`` files, use ``network_input_sample/split.py`` to create ``train/val`` set. Then use ``network_input_sample/coco_style_anno_generation.py`` to generate the networ input.
 
+Example data generated is shown in [here](https://drive.google.com/file/d/1yvQiGth3-OAq0jovorvj8N4koBewYN8x/view?usp=sharing).
+
 When using ``umap_gene`` or ``umap_proj`` in ``eval.py``, please refer to ``network_input_sample/coco_style_info_gene.py`` to create the network input.
 
 ### Training
