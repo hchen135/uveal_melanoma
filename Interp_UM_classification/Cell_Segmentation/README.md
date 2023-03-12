@@ -27,7 +27,7 @@ python train.py --config=UMSLIC_config --save_folder=weights/11242020/ --save_in
 ```
 
 ### Evalutation - image display
-Choose the pretrained model, and define the input and output path of the image folder.
+Choose the pretrained model, and define the input and output path of the image folder. An pre-trained model which is used in the paper is at [here (`UMSLIC_59_3000.pth`)](https://drive.google.com/drive/folders/1j08BDQgGrdPG8LfFu5n-IyJK6nQfue0H?usp=sharing).
 ```Shell
 python eval.py --trained_model=weights/11242020/UMSLIC_79_4000.pth --score_threshold=0.15 --top_k=50 --config=UMSLIC_config --images=data/UMSLIC_val:data/UMSLIC_valresult
 ```
